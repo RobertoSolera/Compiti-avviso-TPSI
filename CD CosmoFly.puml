@@ -1,0 +1,141 @@
+@startuml
+
+'=== Interfacce ===
+interface Autenticabile {
+  +autentica()
+}
+interface IAssistenteDiBordo {
+  +rispondiRichiestaCliente()
+  +segnalaProblemaTecnico()
+}
+
+'=== Utenti ===
+abstract class Utente {
+  -id : int
+  -nome : String
+  -cognome : String
+  -dataNascita : Date
+  -indirizzo : String
+  -credenziali : String
+}
+Utente <|.. Cliente
+Utente <|.. Dipendente
+Utente ..|> Autenticabile
+
+class Cliente
+class ClientePrivato
+class ClienteVIP
+class ClienteAziendale {
+  -nomeAzienda : String
+  -maxDipendenti : int
+}
+Cliente <|-- ClientePrivato
+ClientePrivato <|-- ClienteVIP
+Cliente <|-- ClienteAziendale
+
+abstract class Dipendente
+Dipendente <|-- Pilota
+Dipendente <|-- Medico
+Dipendente <|-- TecnicoDiTerra
+Dipendente <|-- Amministratore
+
+class Pilota {
+  -oreVolo : int
+  -brevetti : String
+}
+class Medico {
+  -specializzazione : String
+  -idMedico : int
+}
+class TecnicoDiTerra {
+  -specializzazione : String
+  -livelloAccesso : int
+}
+class Amministratore
+
+'=== Viaggi e prenotazioni ===
+class ViaggioSpaziale {
+  -id : int
+  -dataPartenza : Date
+  -arrivoStimato : Date
+  -prezzo : double
+  -maxPosti : int
+}
+class Destinazione {
+  -nome : String
+  -coordinate : String
+  -distanzaTerra : double
+}
+class Prenotazione {
+  -id : int
+  -dataPrenotazione : Date
+  -stato : String
+}
+class EsameMedico {
+  -id : int
+  -risultati : String
+  -data : Date
+}
+abstract class ServizioAggiuntivo {
+  -descrizione : String
+  -costo : double
+}
+class NavettaPrivata
+class Concierge
+class CabinaDeluxe
+class BagaglioExtra
+
+'=== Navi e manutenzione ===
+class NaveSpaziale {
+  -id : int
+  -modello : String
+  -capacita : int
+}
+class IA_Bordo {
+}
+IA_Bordo ..|> IAssistenteDiBordo
+
+class ReportTecnico {
+  -id : int
+  -data : Date
+  -descrizione : String
+}
+
+'=== Relazioni ===
+ViaggioSpaziale "1" --> "1" Destinazione
+ViaggioSpaziale "1" --> "1" NaveSpaziale
+ViaggioSpaziale "1" o-- "*" Prenotazione
+Prenotazione "1" *-- "1" EsameMedico
+Prenotazione "0..1" --> ServizioAggiuntivo
+ServizioAggiuntivo <|-- NavettaPrivata
+ServizioAggiuntivo <|-- Concierge
+ServizioAggiuntivo <|-- CabinaDeluxe
+ServizioAggiuntivo <|-- BagaglioExtra
+NaveSpaziale "1" *-- "1" IA_Bordo
+NaveSpaziale "0..*" o-- ReportTecnico
+ReportTecnico --> TecnicoDiTerra
+Prenotazione --> Cliente
+EsameMedico --> Medico
+ViaggioSpaziale "1..*" --> Pilota
+
+'=== Eccezioni ===
+abstract class EccezioneCosmoFly {
+  -messaggio : String
+  -timestamp : Date
+  -codiceErrore : int
+}
+class EccezionePrenotazioneNonValida
+class EccezionePostiEsauriti
+class EccezioneNaveNonDisponibile
+class EccezioneCreazioneNave
+class EccezioneAutenticazioneFallita
+class EccezioneAccessoNonAutorizzato
+
+EccezioneCosmoFly <|-- EccezionePrenotazioneNonValida
+EccezioneCosmoFly <|-- EccezionePostiEsauriti
+EccezioneCosmoFly <|-- EccezioneNaveNonDisponibile
+EccezioneCosmoFly <|-- EccezioneCreazioneNave
+EccezioneCosmoFly <|-- EccezioneAutenticazioneFallita
+EccezioneCosmoFly <|-- EccezioneAccessoNonAutorizzato
+
+@enduml

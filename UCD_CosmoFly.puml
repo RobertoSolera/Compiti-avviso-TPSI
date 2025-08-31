@@ -1,0 +1,71 @@
+@startuml
+left to right direction
+actor Cliente
+actor "Cliente VIP" as VIP
+actor "Cliente Aziendale" as Azienda
+actor Pilota
+actor "Tecnico di terra" as Tecnico
+actor Medico
+actor "Amministratore centrale" as Admin
+actor "IA di bordo" as IA
+
+rectangle "Sistema Gestionale CosmoFly" {
+  
+  usecase "Registrarsi" as UC1
+  usecase "Prenotare viaggio" as UC2
+  usecase "Modificare/Cancellare prenotazione" as UC3
+  usecase "Visualizzare dettagli volo" as UC4
+  usecase "Prenotare navetta privata" as UC5
+  usecase "Richiedere assistenza concierge" as UC6
+  usecase "Gestire prenotazioni dipendenti" as UC7
+  usecase "Accedere a missioni assegnate" as UC8
+  usecase "Visualizzare dati passeggeri" as UC9
+  usecase "Compilare report missione" as UC10
+  usecase "Gestire visite mediche" as UC11
+  usecase "Confermare idoneità al volo" as UC12
+  usecase "Monitorare missione" as UC13
+  usecase "Ricevere segnalazioni IA" as UC14
+  usecase "Aggiornare software" as UC15
+  usecase "Gestire destinazioni e tratte" as UC16
+  usecase "Aggiornare pacchetti" as UC17
+  usecase "Gestire staff" as UC18
+  usecase "Monitorare stato nave" as UC19
+  usecase "Assistere passeggeri" as UC20
+  usecase "Segnalare problemi" as UC21
+}
+
+Cliente --> UC1
+Cliente --> UC2
+Cliente --> UC3
+Cliente --> UC4
+
+VIP --> UC2
+VIP --> UC5
+VIP --> UC6
+
+Azienda --> UC7
+
+Pilota --> UC8
+Pilota --> UC9
+Pilota --> UC10
+
+Medico --> UC11
+Medico --> UC12
+UC12 .> UC2 : <<include>>
+
+Tecnico --> UC13
+Tecnico --> UC14
+Tecnico --> UC15
+
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+
+IA --> UC19
+IA --> UC20
+IA --> UC21
+UC14 .> UC21 : <<include>>
+UC6 .> UC20 : <<extend>>
+UC5 .> UC2 : <<extend>>
+
+@enduml
